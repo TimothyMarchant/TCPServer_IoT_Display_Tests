@@ -10,7 +10,7 @@ namespace TCPServer_IoT_Display_Unit_Tests
     {
     
         [TestClass]
-        public class TCPServer_UnitTests : TCPServerProgram
+        public class TCPServer_UnitTests 
         {
         [ClassInitialize]
         public static void Programinit(TestContext x)
@@ -173,6 +173,30 @@ namespace TCPServer_IoT_Display_Unit_Tests
             {
                 Assert.AreEqual(temp[i], ExpectedByteOrder[i]);
             }
+        }
+        [TestMethod]
+        public void Test_GetImageFromTable_VALID()
+        {
+            const int image1id = 1;
+            const int image2id = 2;
+            byte[] image1;
+            byte[] image2;
+            byte[] expectedimage1 = TCPServerProgram.GetBitmap1();
+            byte[] expectedimage2 = TCPServerProgram.GetBitmap2();
+            //will get bitmap1 and bitmap2 respectively.
+            image1 =TCPServerProgram.GetImageFromTable(image1id);
+            image2=TCPServerProgram.GetImageFromTable(image2id);
+            Assert.AreEqual(expectedimage1,image1);
+            Assert.AreEqual(expectedimage2,image2);
+        }
+        [TestMethod]
+        public void Test_GetImageFromTable_INVALID()
+        {
+            byte[] image;
+            const int nonvalidID = 3;
+            byte[] expectedimage = TCPServerProgram.GetBitmap1();
+            image=TCPServerProgram.GetImageFromTable(nonvalidID);
+            Assert.AreEqual(expectedimage,image);
         }
         [ClassCleanup]
         public static void ClassCleanup()

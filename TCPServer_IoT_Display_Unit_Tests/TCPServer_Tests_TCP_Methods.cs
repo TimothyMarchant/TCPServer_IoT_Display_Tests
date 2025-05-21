@@ -171,9 +171,52 @@ namespace TCPServer_IoT_Display_Unit_Tests
             Assert.AreEqual(ExpectedResponse, buffer[0]);
         }
         [TestMethod]
-        public void Testtemp()
+        public void Test_GetImage_FromServerLoop_FirstDevice()
         {
-
+            const int TCPSegmentLength = 1000;
+            byte[] Expectedimage = TCPServerProgram.GetBitmap1();
+            byte[]buffer = new byte[256];
+            byte[] image=new byte[5000];
+            const string GetImage = "GetImage";
+            const string SetID = "SetID";
+            SendData(Encoding.ASCII.GetBytes(SetID));
+            ReceiveData(buffer);
+            SendData(Encoding.ASCII.GetBytes(GetImage));
+            ReceiveData(buffer);
+            SendData(Encoding.ASCII.GetBytes("a"));
+            for (int i = 0; i < 5; i++)
+            {
+                stream.Read(image, i * TCPSegmentLength, TCPSegmentLength);
+            }
+            for (int i = 0; i < image.Length; i++)
+            {
+                Assert.AreEqual(Expectedimage[i], image[i]);
+            }
+        }
+        [TestMethod]
+        public void Test_GetImage_FromServerLoop_SecondDevice()
+        {
+            const int TCPSegmentLength = 1000;
+            const string FirstDeviceIPandPort = "10.2.2.2:7778";
+            TCPServerProgram.SetID(FirstDeviceIPandPort);
+            byte[] Expectedimage = TCPServerProgram.GetBitmap2();
+            byte[] image = new byte[5000];
+            byte[] buffer = new byte[256];
+            const string GetImage = "GetImage";
+            const string SetID = "SetID";
+            SendData(Encoding.ASCII.GetBytes(SetID));
+            ReceiveData(buffer);
+            SendData(Encoding.ASCII.GetBytes(GetImage));
+            ReceiveData(buffer);
+            SendData(Encoding.ASCII.GetBytes("a"));
+            for (int i = 0; i < 5; i++)
+            {
+                stream.Read(image, i * TCPSegmentLength, TCPSegmentLength);
+            }
+            for (int i = 0; i < image.Length; i++)
+            {
+                Assert.AreEqual(Expectedimage[i], image[i]);
+            }
         }
         [TestCleanup]
         public void CleanupTCPClient()
