@@ -187,6 +187,7 @@ namespace TCPServer_IoT_Display_Unit_Tests
             for (int i = 0; i < 5; i++)
             {
                 stream.Read(image, i * TCPSegmentLength, TCPSegmentLength);
+                SendData(Encoding.ASCII.GetBytes("a"));
             }
             for (int i = 0; i < image.Length; i++)
             {
@@ -212,6 +213,7 @@ namespace TCPServer_IoT_Display_Unit_Tests
             for (int i = 0; i < 5; i++)
             {
                 stream.Read(image, i * TCPSegmentLength, TCPSegmentLength);
+                SendData(Encoding.ASCII.GetBytes("a"));
             }
             for (int i = 0; i < image.Length; i++)
             {
