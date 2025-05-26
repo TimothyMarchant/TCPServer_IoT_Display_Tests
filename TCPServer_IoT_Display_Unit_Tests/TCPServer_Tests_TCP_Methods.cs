@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -219,6 +220,17 @@ namespace TCPServer_IoT_Display_Unit_Tests
             {
                 Assert.AreEqual(Expectedimage[i], image[i]);
             }
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IOException))]
+        public void Test_ServerReadTimeout()
+        {
+            //timeout is set for 10 milliseconds for fast testing.
+            const int TestServerTimeout= 10;
+            TCPServerProgram.SetReadTimeout(stream, TestServerTimeout);
+            byte[] temp = new byte[255];
+            ReceiveData(temp);
+
         }
         [TestCleanup]
         public void CleanupTCPClient()
